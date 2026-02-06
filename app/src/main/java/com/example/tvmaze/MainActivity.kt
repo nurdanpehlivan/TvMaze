@@ -5,7 +5,7 @@ import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import com.example.tvmaze.ui.navigation.AppNavGraph
+import com.example.tvmaze.ui.navigation.AppNavHost
 import com.example.tvmaze.ui.theme.RetrofitTheme
 
 class MainActivity : ComponentActivity() {
@@ -14,7 +14,7 @@ class MainActivity : ComponentActivity() {
         setContent {
             RetrofitTheme {
                 Surface(color = MaterialTheme.colorScheme.background) {
-                    AppNavGraph()
+                    AppNavHost()
                 }
             }
         }

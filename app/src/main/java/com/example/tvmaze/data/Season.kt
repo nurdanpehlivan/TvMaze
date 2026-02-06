@@ -2,9 +2,9 @@ package com.example.tvmaze.data
 
 data class Season(
     val id: Int,
-    val number: Int?,
-    val episodeOrder: Int?,
-    val premiereDate: String?,
-    val endDate: String?,
-    val image: Image?
+    val number: Int? = null,
+    val episodeOrder: Int? = null,
+    val premiereDate: String? = null,
+    val endDate: String? = null,
+    val image: Image? = null
 )

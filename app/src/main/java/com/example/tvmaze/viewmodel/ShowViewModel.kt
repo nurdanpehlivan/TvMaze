@@ -159,18 +159,16 @@ class ShowViewModel : ViewModel() {
             try {
                 detail = RetrofitInstance.api.getShowDetail(id)
                 episodes = RetrofitInstance.api.getEpisodes(id)
+                seasons = RetrofitInstance.api.getSeasons(id)
                 cast = RetrofitInstance.api.getCast(id)
-
-                // Detay çekince favori durumunu koru (allShows içinden)
-                val isFav = allShows.find { it.id == id }?.isFavorite == true
-                detail = detail?.copy(isFavorite = isFav)
-
+                crew = RetrofitInstance.api.getCrew(id)
+                images = RetrofitInstance.api.getImages(id)
             } catch (e: Exception) {
-                Log.e("ShowViewModel", "loadDetail failed", e)
                 errorMessage = e.message ?: "Detay yüklenemedi"
             } finally {
                 isLoading = false
             }
         }
     }
+
 }

@@ -1,17 +1,18 @@
 package com.example.tvmaze.data
 
+
 data class ShowImage(
     val id: Int,
-    val type: String?,      // poster, banner, background vs.
-    val main: Boolean?,
-    val resolutions: ImageResolutions
+    val type: String? = null,
+    val main: Boolean? = null,
+    val resolutions: Resolutions
 )
 
-data class ImageResolutions(
-    val medium: ImageSize?,
-    val original: ImageSize?
+data class Resolutions(
+    val medium: ImageUrl? = null,
+    val original: ImageUrl? = null
 )
 
-data class ImageSize(
+data class ImageUrl(
     val url: String
 )

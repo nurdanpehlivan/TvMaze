@@ -20,6 +20,15 @@ data class Episode(
     val id: Int,
     val name: String,
     val season: Int,
-    val number: Int
+    val number: Int,
+
+    val airdate: String? = null,
+    val runtime: Int? = null,
+    val summary: String? = null,
+    val image: Image? = null,
+    val rating: Rating? = null
 )
 
+data class Rating(
+    val average: Double? = null
+)

@@ -10,11 +10,12 @@ import com.example.tvmaze.ui.screens.FavoriteScreen
 import com.example.tvmaze.ui.screens.ShowDetailScreen
 import com.example.tvmaze.ui.screens.ShowScreen
 
-
 @Composable
-fun AppNavGraph() {
+fun AppNavHost() {
     val navController = rememberNavController()
-    val vm: ShowViewModel = viewModel() // ✅ tek VM
+
+    // ✅ TEK VM
+    val vm: ShowViewModel = viewModel()
 
     NavHost(navController = navController, startDestination = "shows") {
 
@@ -27,9 +28,10 @@ fun AppNavGraph() {
         }
 
         composable("show_detail/{id}") { backStackEntry ->
-            val id = backStackEntry.arguments?.getString("id")!!.toInt()
+            val id = backStackEntry.arguments?.getString("id")?.toIntOrNull() ?: return@composable
             ShowDetailScreen(showId = id, viewModel = vm)
         }
     }
 }
+
 
