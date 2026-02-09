@@ -1,6 +1,10 @@
+import org.gradle.kotlin.dsl.implementation
+
 plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.compose)
+    alias (libs.plugins.hilt.android)
+    alias(libs.plugins.google.devtools.ksp)
 }
 
 android {
@@ -28,16 +32,12 @@ android {
     }
 
     compileOptions {
-        sourceCompatibility = JavaVersion.VERSION_11
-        targetCompatibility = JavaVersion.VERSION_11
+        sourceCompatibility = JavaVersion.VERSION_17
+        targetCompatibility = JavaVersion.VERSION_17
     }
 
     buildFeatures {
         compose = true
-    }
-
-    composeOptions {
-        kotlinCompilerExtensionVersion = "1.9.10"
     }
 }
 
@@ -47,21 +47,20 @@ dependencies {
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
-
-    implementation("androidx.navigation:navigation-compose:2.9.7")
-    implementation("io.coil-kt:coil-compose:2.7.0")
-
-
+    implementation(libs.androidx.navigation.compose)
+    implementation(libs.coil.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.compose.ui)
     implementation(libs.androidx.compose.ui.graphics)
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.material3)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
+    implementation(libs.gson)
 
-    implementation("com.squareup.retrofit2:retrofit:3.0.0")
-    implementation("com.squareup.retrofit2:converter-gson:3.0.0")
-
-    implementation("com.google.code.gson:gson:2.13.2")
+    implementation (libs.hilt.android)
+    //implementation (libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
 
     // Test
     testImplementation(libs.junit)
