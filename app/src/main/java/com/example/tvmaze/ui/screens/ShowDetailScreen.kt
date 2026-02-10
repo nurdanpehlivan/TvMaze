@@ -11,10 +11,12 @@ import androidx.compose.material3.*
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
+import androidx.compose.foundation.layout.statusBarsPadding
 import coil.compose.AsyncImage
 import com.example.tvmaze.viewmodel.ShowViewModel
 import androidx.compose.material3.ExperimentalMaterial3Api
-
+import androidx.compose.ui.res.stringResource
+import com.example.tvmaze.R
 private fun htmlToText(html: String): String {
     return Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY).toString()
 }
@@ -31,7 +33,15 @@ fun ShowDetailScreen(
 
     val show = viewModel.detail ?: viewModel.getShowById(showId) ?: return
 
-    val tabs = listOf("Main", "Episodes", "Seasons", "Cast", "Crew", "Characters", "Gallery")
+    val tabs = listOf(
+        stringResource(R.string.tab_main),
+        stringResource(R.string.tab_episodes),
+        stringResource(R.string.tab_seasons),
+        stringResource(R.string.tab_cast),
+        stringResource(R.string.tab_crew),
+        stringResource(R.string.tab_characters),
+        stringResource(R.string.tab_gallery)
+    )
     var selectedTab by remember { mutableIntStateOf(0) }
 
     Scaffold(
@@ -82,16 +92,19 @@ fun ShowDetailScreen(
                     item {
                         AsyncImage(
                             model = show.image?.original,
-                            contentDescription = show.name,
+                            contentDescription = stringResource(R.string.poster_desc),
                             modifier = Modifier
                                 .fillMaxWidth()
                                 .height(300.dp)
                         )
                     }
                     item {
-                        Text(show.name, style = MaterialTheme.typography.headlineMedium)
-                        Text("Genres: ${show.genres.joinToString(", ")}")
-                    }
+                        Text(
+                            text = stringResource(
+                                R.string.genres_format,
+                                show.genres.joinToString(", ")
+                            )
+                        )}
                     item {
                         Text(
                             text = show.summary?.let { htmlToText(it) } ?: ""
@@ -99,7 +112,11 @@ fun ShowDetailScreen(
                     }
                     item {
                         Button(onClick = { viewModel.toggleFavorite(show) }) {
-                            Text(if (show.isFavorite) "Favoriden Çıkar" else "Favoriye Ekle")
+                            Text(
+                                if (show.isFavorite)
+                                    stringResource(R.string.remove_from_favorites)
+                                else
+                                    stringResource(R.string.add_to_favorites))
                         }
                     }
                 }
@@ -107,7 +124,7 @@ fun ShowDetailScreen(
                 // ---------- EPISODES (foto + score) ----------
                 1 -> {
                     if (viewModel.episodes.isEmpty()) {
-                        item { Text("Bölüm bulunamadı") }
+                        item { Text(stringResource(R.string.no_episodes)) }
                     } else {
                         items(viewModel.episodes) { ep ->
                             Row(modifier = Modifier.fillMaxWidth()) {
@@ -122,8 +139,22 @@ fun ShowDetailScreen(
                                         text = "${ep.season}x${ep.number}  ${ep.name}",
                                         style = MaterialTheme.typography.titleMedium
                                     )
-                                    Text("Score: ${ep.rating?.average ?: "-"}")
-                                    ep.airdate?.let { Text("Airdate: $it") }
+                                    Text(
+                                        text = stringResource(
+                                            R.string.score_format,
+                                            ep.rating?.average?.toString() ?: "-"
+                                        )
+                                    )
+
+                                    // ❌ "Airdate: ..."
+                                    ep.airdate?.let {
+                                        Text(
+                                            text = stringResource(
+                                                R.string.airdate_format,
+                                                it
+                                            )
+                                        )
+                                    }
                                 }
                             }
                             HorizontalDivider()
@@ -199,7 +230,10 @@ fun ShowDetailScreen(
                                                     maxLines = 1
                                                 )
                                                 Text(
-                                                    text = "as ${c.character.name}",
+                                                    text = stringResource(
+                                                        R.string.as_character_format,
+                                                        c.character.name
+                                                    ),
                                                     style = MaterialTheme.typography.bodySmall,
                                                     maxLines = 1
                                                 )
@@ -215,7 +249,7 @@ fun ShowDetailScreen(
                 // ---------- CREW (foto + type) ----------
                 4 -> {
                     if (viewModel.crew.isEmpty()) {
-                        item { Text("Crew bulunamadı") }
+                        item { Text(stringResource(R.string.no_crew)) }
                     } else {
                         items(viewModel.crew) { cr ->
                             Row(modifier = Modifier.fillMaxWidth()) {
@@ -239,7 +273,7 @@ fun ShowDetailScreen(
                 5 -> {
                     val characters = viewModel.cast.map { it.character }.distinctBy { it.id }
                     if (characters.isEmpty()) {
-                        item { Text("Character bulunamadı") }
+                        item { Text(stringResource(R.string.no_characters)) }
                     } else {
                         items(characters) { ch ->
                             Row(modifier = Modifier.fillMaxWidth()) {
@@ -259,7 +293,7 @@ fun ShowDetailScreen(
                 // ---------- GALLERY (type başlığı 1 kez + altında görseller) ----------
                 6 -> {
                     if (viewModel.images.isEmpty()) {
-                        item { Text("Görsel bulunamadı") }
+                        item { Text(stringResource(R.string.no_images)) }
                     } else {
                         val grouped = viewModel.images.groupBy { it.type ?: "Other" }
 
