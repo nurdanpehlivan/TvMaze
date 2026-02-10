@@ -12,9 +12,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.unit.dp
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.ui.res.stringResource
 import androidx.navigation.NavController
+import com.example.tvmaze.R
 import com.example.tvmaze.viewmodel.ShowViewModel
-
 
 @Composable
 fun FavoriteScreen(
@@ -26,10 +27,13 @@ fun FavoriteScreen(
     Scaffold(
         topBar = {
             Column(modifier = Modifier.statusBarsPadding()) {
-                TopAppBar(title = { Text("Favoriler") })
+                TopAppBar(
+                    title = { Text(stringResource(R.string.favorites_title)) }
+                )
             }
         }
     ) { innerPadding ->
+
         if (favorites.isEmpty()) {
             Box(
                 modifier = Modifier
@@ -37,7 +41,7 @@ fun FavoriteScreen(
                     .padding(innerPadding),
                 contentAlignment = Alignment.Center
             ) {
-                Text("Henüz favori yok")
+                Text(stringResource(R.string.no_favorites_yet))
             }
         } else {
             LazyVerticalGrid(
@@ -56,4 +60,3 @@ fun FavoriteScreen(
         }
     }
 }
-

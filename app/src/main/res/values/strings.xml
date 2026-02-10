@@ -1,3 +1,39 @@
 <resources>
     <string name="app_name">TvMaze</string>
+    <string name="app_logo_desc">Uygulama logosu</string>
+
+    <string name="all_genres">Tümü</string>
+    <string name="favorites_button">Favoriler</string>
+    <string name="popular_button">Popüler</string>
+    <string name="search_button">Ara</string>
+    <string name="search_hint">Dizi ara</string>
+
+    <string name="tab_cast">Oyuncular</string>
+    <string name="tab_characters">Karakterler</string>
+    <string name="tab_crew">Ekip</string>
+    <string name="tab_episodes">Bölümler</string>
+    <string name="tab_gallery">Galeri</string>
+    <string name="tab_main">Genel</string>
+    <string name="tab_seasons">Sezonlar</string>
+
+    <string name="add_to_favorites">Favoriye ekle</string>
+    <string name="airdate_format">Yayın tarihi: %1$s</string>
+    <string name="as_character_format">%1$s rolünde</string>
+    <string name="episodes_count_format">Bölüm sayısı: %1$s</string>
+    <string name="favorite_icon_desc">Favori</string>
+    <string name="favorites_title">Favoriler</string>
+    <string name="genres_format">Türler: %1$s</string>
+    <string name="poster_desc">Dizi posteri</string>
+    <string name="remove_from_favorites">Favorilerden çıkar</string>
+    <string name="score_format">Puan: %1$s</string>
+    <string name="season_image_desc_format">%1$s. sezon görseli</string>
+    <string name="season_title_format">%1$s. Sezon</string>
+
+    <string name="no_cast">Oyuncu bulunamadı</string>
+    <string name="no_characters">Karakter bulunamadı</string>
+    <string name="no_crew">Ekip bilgisi bulunamadı</string>
+    <string name="no_episodes">Bölüm bulunamadı</string>
+    <string name="no_favorites_yet">Henüz favori yok</string>
+    <string name="no_images">Görsel bulunamadı</string>
+    <string name="no_seasons">Sezon bulunamadı</string>
 </resources>

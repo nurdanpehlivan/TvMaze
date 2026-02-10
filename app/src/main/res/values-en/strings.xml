@@ -1,0 +1,39 @@
+<resources>
+    <string name="app_name">TvMaze</string>
+    <string name="app_logo_desc">App logo</string>
+
+    <string name="all_genres">All</string>
+    <string name="favorites_button">Favorites</string>
+    <string name="popular_button">Popular</string>
+    <string name="search_button">Search</string>
+    <string name="search_hint">Search show</string>
+
+    <string name="tab_cast">Cast</string>
+    <string name="tab_characters">Characters</string>
+    <string name="tab_crew">Crew</string>
+    <string name="tab_episodes">Episodes</string>
+    <string name="tab_gallery">Gallery</string>
+    <string name="tab_main">Main</string>
+    <string name="tab_seasons">Seasons</string>
+
+    <string name="add_to_favorites">Add to favorites</string>
+    <string name="airdate_format">Airdate: %1$s</string>
+    <string name="as_character_format">as %1$s</string>
+    <string name="episodes_count_format">Episodes: %1$s</string>
+    <string name="favorite_icon_desc">Favorite</string>
+    <string name="favorites_title">Favorites</string>
+    <string name="genres_format">Genres: %1$s</string>
+    <string name="poster_desc">Poster</string>
+    <string name="remove_from_favorites">Remove from favorites</string>
+    <string name="score_format">Score: %1$s</string>
+    <string name="season_image_desc_format">Season %1$s image</string>
+    <string name="season_title_format">Season %1$s</string>
+
+    <string name="no_cast">No cast found</string>
+    <string name="no_characters">No characters found</string>
+    <string name="no_crew">No crew found</string>
+    <string name="no_episodes">No episodes found</string>
+    <string name="no_favorites_yet">No favorites yet</string>
+    <string name="no_images">No images found</string>
+    <string name="no_seasons">No seasons found</string>
+</resources>

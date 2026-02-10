@@ -27,6 +27,7 @@ import androidx.navigation.NavController
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
+import androidx.compose.ui.res.stringResource
 
 
 @Composable
@@ -47,7 +48,7 @@ fun ShowScreen(viewModel: ShowViewModel, navController: NavController) {
             // Logo
             Image(
                 painter = painterResource(id = R.drawable.icon),
-                contentDescription = "Uygulama Logosu",
+                contentDescription = stringResource(R.string.app_logo_desc),
                 modifier = Modifier
                     .height(60.dp)
                     .fillMaxWidth()
@@ -58,7 +59,7 @@ fun ShowScreen(viewModel: ShowViewModel, navController: NavController) {
             OutlinedTextField(
                 value = searchText,
                 onValueChange = { searchText = it },
-                label = { Text("Dizi Ara") },
+                label = { Text(stringResource(R.string.search_hint)) },
                 modifier = Modifier.fillMaxWidth()
             )
 
@@ -73,18 +74,19 @@ fun ShowScreen(viewModel: ShowViewModel, navController: NavController) {
                 Button(
                     onClick = { viewModel.searchShow(searchText) },
                     modifier = Modifier.weight(1f)
-                ) { Text("Ara") }
+                ) { Text(stringResource(R.string.search_button))
+                }
 
                 Button(
                     onClick = { viewModel.getPopularShows() },
                     modifier = Modifier.weight(1f)
-                ) { Text("Popüler") }
+                ) { Text(stringResource(R.string.popular_button)) }
 
                 Button(
                     onClick = { navController.navigate("favorites") },
                     modifier = Modifier.weight(1f)
                 ) {
-                    Text("Favoriler")
+                    Text(stringResource(R.string.favorites_button))
                 }
             }
 
@@ -100,7 +102,7 @@ fun ShowScreen(viewModel: ShowViewModel, navController: NavController) {
                 ) {
                     // "Tümü" butonu
                     Button(onClick = { viewModel.filterByGenre(null) }) {
-                        Text("Tümü")
+                        Text(stringResource(R.string.all_genres))
                     }
 
                     // API’den gelen türler
@@ -183,7 +185,7 @@ fun ShowItem(show: Show, navController: NavController, viewModel: ShowViewModel)
                 ) {
                     Icon(
                         imageVector = if (show.isFavorite) Icons.Filled.Favorite else Icons.Filled.FavoriteBorder,
-                        contentDescription = "Favori"
+                        contentDescription = stringResource(R.string.favorite_icon_desc)
                     )
                 }
             }
