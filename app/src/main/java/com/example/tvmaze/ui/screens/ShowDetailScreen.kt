@@ -17,6 +17,7 @@ import com.example.tvmaze.viewmodel.ShowViewModel
 import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.ui.res.stringResource
 import com.example.tvmaze.R
+import com.example.tvmaze.ui.extensions.fullScreenPadding
 private fun htmlToText(html: String): String {
     return Html.fromHtml(html, Html.FROM_HTML_MODE_LEGACY).toString()
 }
@@ -74,9 +75,7 @@ fun ShowDetailScreen(
     ) { innerPadding ->
 
         LazyColumn(
-            modifier = Modifier
-                .fillMaxSize()
-                .padding(innerPadding),
+            modifier = Modifier.fullScreenPadding(innerPadding),
             contentPadding = PaddingValues(16.dp),
             verticalArrangement = Arrangement.spacedBy(12.dp)
         ) {
@@ -165,7 +164,7 @@ fun ShowDetailScreen(
                 // ---------- SEASONS (foto + yazı) ----------
                 2 -> {
                     if (viewModel.seasons.isEmpty()) {
-                        item { Text("Sezon bulunamadı") }
+                        item { Text(stringResource(R.string.no_seasons)) }
                     } else {
                         items(viewModel.seasons) { s ->
                             Row(modifier = Modifier.fillMaxWidth()) {
@@ -192,7 +191,7 @@ fun ShowDetailScreen(
                 // ---------- CAST (eşit boy + aşağı kaydırmalı grid) ----------
                 3 -> {
                     if (viewModel.cast.isEmpty()) {
-                        item { Text("Cast bulunamadı") }
+                        item { Text(stringResource(R.string.no_cast)) }
                     } else {
                         // Grid yüksekliğini kaba bir şekilde hesaplayalım (scroll çakışmasın)
                         val rows = (viewModel.cast.size + 1) / 2
