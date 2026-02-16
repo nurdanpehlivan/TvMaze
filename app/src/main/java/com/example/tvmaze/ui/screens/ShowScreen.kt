@@ -28,7 +28,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.res.stringResource
-import kotlinx.coroutines.delay
 
 
 @Composable
@@ -36,14 +35,6 @@ fun ShowScreen(viewModel: ShowViewModel, navController: NavController) {
 
     var searchText by remember { mutableStateOf("") }
 
-    LaunchedEffect(searchText) {
-        val query= searchText.trim()
-        if(query.length<3) return@LaunchedEffect
-        delay(500)
-        if(query==searchText.trim()) {
-            viewModel.searchShow(query)
-        }
-    }
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
