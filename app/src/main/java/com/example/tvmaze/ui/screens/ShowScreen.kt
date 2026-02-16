@@ -44,6 +44,7 @@ fun ShowScreen(viewModel: ShowViewModel, navController: NavController) {
             viewModel.searchShow(query)
         }
     }
+
     Surface(
         modifier = Modifier.fillMaxSize(),
         color = Color.White
