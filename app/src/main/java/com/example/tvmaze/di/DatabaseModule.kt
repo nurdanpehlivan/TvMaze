@@ -23,7 +23,7 @@ object DatabaseModule {
             AppDatabase::class.java,
             "tvmaze_database"
         )
-            .fallbackToDestructiveMigration()
+            .fallbackToDestructiveMigration(true)
             .build()
     }
 
