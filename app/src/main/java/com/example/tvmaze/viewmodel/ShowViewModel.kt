@@ -14,10 +14,15 @@ import kotlinx.coroutines.launch
 import com.example.tvmaze.data.CrewItemModel
 import com.example.tvmaze.data.ShowImage
 import com.example.tvmaze.data.Season
+import com.example.tvmaze.data.repository.FavoriteRepository
+import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.flow.firstOrNull
+import javax.inject.Inject
 
-
-
-class ShowViewModel : ViewModel() {
+@HiltViewModel
+class ShowViewModel @Inject constructor(
+    private val favoriteRepository: FavoriteRepository
+) : ViewModel() {
 
     // ---------- Main lists ----------
     private var allShows: List<Show> = emptyList()
@@ -61,24 +66,97 @@ class ShowViewModel : ViewModel() {
     var images by mutableStateOf<List<ShowImage>>(emptyList())
         private set
 
+    // Favori ID'leri için set
+    private var favoriteIds = setOf<Int>()
+
+    init {
+        // Uygulama başladığında veritabanından favorileri yükle
+        loadFavoritesFromDb()
+    }
+
     // ---------- Favorites ----------
+    private fun loadFavoritesFromDb() {
+        viewModelScope.launch {
+            try {
+                favoriteRepository.getFavoriteIds().collect { ids ->
+                    favoriteIds = ids.toSet()
+
+                    // Mevcut listeyi güncelle
+                    allShows = allShows.map { show ->
+                        show.copy(isFavorite = show.id in favoriteIds)
+                    }
+                    shows = shows.map { show ->
+                        show.copy(isFavorite = show.id in favoriteIds)
+                    }
+                    detail = detail?.copy(isFavorite = detail?.id in favoriteIds)
+
+                    // Favori listesini güncelle
+                    updateFavoriteShows()
+                }
+            } catch (e: Exception) {
+                Log.e("ShowViewModel", "loadFavoritesFromDb failed", e)
+            }
+        }
+    }
+
+    private suspend fun updateFavoriteShows() {
+        try {
+            val favorites = favoriteRepository.getAllFavorites().firstOrNull() ?: emptyList()
+
+            // FavoriteEntity'den Show'a dönüştür
+            favoriteShows = favorites.map { entity ->
+                // Önce mevcut listede ara
+                allShows.find { it.id == entity.showId }
+                    ?: Show(
+                        id = entity.showId,
+                        name = entity.name,
+                        genres = emptyList(),
+                        image = entity.imageUrl?.let {
+                            com.example.tvmaze.data.Image(medium = it, original = it)
+                        },
+                        summary = null,
+                        episodes = emptyList(),
+                        isFavorite = true
+                    )
+            }
+        } catch (e: Exception) {
+            Log.e("ShowViewModel", "updateFavoriteShows failed", e)
+        }
+    }
+
     fun toggleFavorite(show: Show) {
-        val newFav = !show.isFavorite
+        viewModelScope.launch {
+            try {
+                val newFav = !show.isFavorite
 
-        allShows = allShows.map { s ->
-            if (s.id == show.id) s.copy(isFavorite = newFav) else s
+                if (newFav) {
+                    // Favorilere ekle
+                    favoriteRepository.addFavorite(show)
+                } else {
+                    // Favorilerden çıkar
+                    favoriteRepository.removeFavorite(show.id)
+                }
+
+                // Local state'i güncelle
+                allShows = allShows.map { s ->
+                    if (s.id == show.id) s.copy(isFavorite = newFav) else s
+                }
+
+                shows = shows.map { s ->
+                    if (s.id == show.id) s.copy(isFavorite = newFav) else s
+                }
+
+                // Eğer detail ekranda bu show gösteriliyorsa, onu da güncelle
+                detail = detail?.let { d ->
+                    if (d.id == show.id) d.copy(isFavorite = newFav) else d
+                }
+
+                // Favori listesini güncelle
+                updateFavoriteShows()
+            } catch (e: Exception) {
+                Log.e("ShowViewModel", "toggleFavorite failed", e)
+            }
         }
-
-        shows = shows.map { s ->
-            if (s.id == show.id) s.copy(isFavorite = newFav) else s
-        }
-
-        // Eğer detail ekranda bu show gösteriliyorsa, onu da güncelle
-        detail = detail?.let { d ->
-            if (d.id == show.id) d.copy(isFavorite = newFav) else d
-        }
-
-        favoriteShows = allShows.filter { it.isFavorite }
     }
 
     fun getShowById(id: Int): Show? = allShows.find { it.id == id }
@@ -92,14 +170,13 @@ class ShowViewModel : ViewModel() {
                 val result = RetrofitInstance.api.getShows(page = 0)
 
                 // Favorileri koru
-                val favoriteIds = allShows.filter { it.isFavorite }.map { it.id }.toSet()
                 val merged = result.map { it.copy(isFavorite = it.id in favoriteIds) }
 
                 allShows = merged
                 selectedGenre = null
                 shows = merged
                 updateGenres(merged)
-                favoriteShows = allShows.filter { it.isFavorite }
+                updateFavoriteShows()
                 hasData = true
             } catch (e: Exception) {
                 Log.e("ShowViewModel", "getPopularShows failed", e)
@@ -124,14 +201,13 @@ class ShowViewModel : ViewModel() {
                 val list = response.map { it.show }
 
                 // Favorileri koru
-                val favoriteIds = allShows.filter { it.isFavorite }.map { it.id }.toSet()
                 val merged = list.map { it.copy(isFavorite = it.id in favoriteIds) }
 
                 allShows = merged
                 selectedGenre = null
                 shows = merged
                 updateGenres(merged)
-                favoriteShows = allShows.filter { it.isFavorite }
+                updateFavoriteShows()
                 hasData = true
             } catch (e: Exception) {
                 Log.e("ShowViewModel", "searchShow failed", e)
@@ -157,7 +233,10 @@ class ShowViewModel : ViewModel() {
             isLoading = true
             errorMessage = null
             try {
-                detail = RetrofitInstance.api.getShowDetail(id)
+                val showDetail = RetrofitInstance.api.getShowDetail(id)
+                // Favori durumunu koru
+                detail = showDetail.copy(isFavorite = id in favoriteIds)
+
                 episodes = RetrofitInstance.api.getEpisodes(id)
                 seasons = RetrofitInstance.api.getSeasons(id)
                 cast = RetrofitInstance.api.getCast(id)
